@@ -16,7 +16,10 @@ let editID = "";
 // Sumbit form
 form.addEventListener('submit', addItem);
 
+// Clear items
+clearBtn.addEventListener('click', clearItems);
 
+const deleteBtn = document.querySelector('.delete-btn');
 
 // Functions
 function addItem(e){
@@ -44,6 +47,9 @@ function addItem(e){
     list.appendChild(element);
     displayAlert('item added to the list', 'success');
     container.classList.add("show-container")
+    addToLocalStorage(id, value);
+    setBackToDefault();
+
   }else if(value && editFlag){
     console.log('editing')
   }else {
@@ -59,4 +65,31 @@ function displayAlert(text, action){
     alert.textContent = "";
     alert.classList.remove(`alert-${action}`);
   }, 1000)
+}
+
+// Clear Items
+function clearItems(){
+  const items = document.querySelectorAll('.grocery-item');
+  if(items.length > 0){
+    items.forEach(function(item){
+      list.removeChild(item);
+    })
+  }
+  container.classList.remove("show-container");
+  displayAlert('empty list', 'danger');
+  setBackToDefault();
+  // localStorage.removeItem('list');
+}
+
+// Set Back to Default
+function setBackToDefault(){
+  grocery.value = '';
+  editFlag = false;
+  editID = '';
+  submitBtn.textContent = "submit"
+}
+
+// Local Storage
+function addToLocalStorage(id, value){
+
 }
