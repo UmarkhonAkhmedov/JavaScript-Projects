@@ -1,4 +1,4 @@
-// Selecte Items
+// Select Items
 const form = document.querySelector(".grocery-form");
 const alert = document.querySelector(".alert");
 const grocery = document.getElementById("grocery");
@@ -44,6 +44,12 @@ function addItem(e){
         </button>
       </div>
     `;
+    const deleteBtn = element.querySelector('.delete-btn');
+    const editBtn = element.querySelector('.edit-btn')
+    deleteBtn.addEventListener('click', deleteItem);
+    editBtn.addEventListener('click', editItem);
+
+
     list.appendChild(element);
     displayAlert('item added to the list', 'success');
     container.classList.add("show-container")
@@ -51,7 +57,10 @@ function addItem(e){
     setBackToDefault();
 
   }else if(value && editFlag){
-    console.log('editing')
+    editElement.innerHtml = value;
+    displayAlert('value changes', 'success')
+    editLocalStorage(editID, value);
+    setBackToDefault()
   }else {
     displayAlert('please enter value', "danger")
   }
@@ -81,6 +90,31 @@ function clearItems(){
   // localStorage.removeItem('list');
 }
 
+// Delete Function
+function deleteItem(e){
+  const element = e.currentTarget.parentElement.parentElement;
+  const id = element.dataset.id;
+
+  list.removeChild(element);
+  if(list.children.length === 0){
+    container.classList.remove("show-container");
+  }
+  displayAlert('item removed', 'danger');
+  setBackToDefault();
+  // Remove from local storage
+  removeFromLocalStorage(id);
+}
+// Edit Function
+function editItem(){
+  const element = e.currentTarget.parentElement.parentElement;
+  editElement = e.currentTarget.parentElement.previousElementSibling;
+  // Set From Value
+  grocery.value = editElement.innerHTML;
+  editFlag = true;
+  editID = element.dataset.id;
+  submitBtn.textContent = "edit";
+}
+
 // Set Back to Default
 function setBackToDefault(){
   grocery.value = '';
@@ -93,3 +127,15 @@ function setBackToDefault(){
 function addToLocalStorage(id, value){
 
 }
+
+function removeFromLocalStorage(id){
+
+}
+
+function editLocalStorage(id, value){
+
+}
+
+localStorage.setItem('orange', JSON.stringify(['item', 'item2']));
+const oranges = JSON.parse(localStorage.getItem('orange'));
+localStorage.removeItem("orange")
